@@ -1,11 +1,12 @@
 {
     "app-id": "org.mozilla.Thunderbird",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "19.08",
+    "runtime-version": "20.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable",
-        "org.freedesktop.Sdk.Extension.node12"
+        "org.freedesktop.Sdk.Extension.node14",
+        "org.freedesktop.Sdk.Extension.llvm12"
     ],
     "command": "thunderbird",
     "rename-icon": "thunderbird",
@@ -55,6 +56,8 @@
     "modules": [
         "shared-modules/gtk2/gtk2.json",
         "shared-modules/dbus-glib/dbus-glib-0.110.json",
+        "shared-modules/libcanberra/libcanberra.json",
+        "shared-modules/intltool/intltool-0.51.json",
         {
             "name": "pcsc-lite",
             "config-opts": [
@@ -119,6 +122,16 @@
             ]
         },
         {
+            "name": "sound-theme-freedesktop",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://salsa.debian.org/gnome-team/sound-theme-freedesktop.git",
+                    "tag": "upstream/0.8"
+                }
+            ]
+        },
+        {
             "name": "cbindgen",
             "buildsystem": "simple",
             "build-commands": [
@@ -137,22 +150,24 @@
                 {
                     "type": "git",
                     "url": "https://github.com/eqrion/cbindgen.git",
-                    "tag": "v0.15.0",
-                    "commit": "83b3be9f884697a51f8717af8b5498866a81e62e"
+                    "tag": "v0.19.0",
+                    "commit": "d9e490ce8b836194595bd30611253a7028059da2"
                 },
-                "cbindgen-dependencies.json"
+                "cbindgen-sources.json"
             ]
         },
         {
             "name": "thunderbird",
             "buildsystem": "simple",
             "build-options":{
-                "append-path": "/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/node12/bin",
-                "append-ld-library-path": "/usr/lib/sdk/node12/lib",
+                "append-path": "/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/node14/bin",
+                "append-ld-library-path": "/usr/lib/sdk/node14/lib",
+                "prepend-path": "/usr/lib/sdk/llvm12/bin",
+                "prepend-ld-library-path": "/usr/lib/sdk/llvm12/lib",
                 "env":{
                     "TERM": "linux",
                     "CARGO_HOME": "/run/build/Thunderbird/cargo",
-                    "npm_config_nodedir": "/usr/lib/sdk/node12"
+                    "npm_config_nodedir": "/usr/lib/sdk/node14"
                 }
             },
             "build-commands": [
